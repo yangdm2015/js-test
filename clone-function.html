@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>function-clone</title>
+</head>
+
+<body>
+    <script>
+        function cloneDeep(obj, stackA, stackB) {
+            let result;
+            if (!obj || typeof obj !== 'object' || obj instanceof Function) {
+                return obj
+            }
+            if (typeof obj === 'object') {
+                stackA || (stackA = []);
+                stackB || (stackB = []);
+
+                var length = stackA.length;
+                while (length--) {
+                    if (stackA[length] == obj) {
+                        return stackB[length];
+                    }
+                }
+                if (obj instanceof Date || obj instanceof Number || obj instanceof Boolean) {
+                    let crt = n.constructor
+                    result = new crt(+obj)
+                    return result
+                } else if (obj instanceof Set) {
+                    stackA.push(obj);
+                    stackB.push(result);
+                    result = new Set(cloneDeep([...obj], stackA, stackB))
+
+                    return result
+                } else if (obj instanceof Map) {
+                    result = new Map()
+                    stackA.push(obj);
+                    stackB.push(result);
+                    obj.forEach((key, value) => {
+                        result.set(key, cloneDeep(value, stackA, stackB))
+
+                    })
+
+                    return result
+                }
+                if (obj instanceof Array) {
+                    result = []
+                } else {
+                    result = {}
+                }
+
+                Object.keys(obj).forEach(key => {
+                    stackA.push(obj);
+                    stackB.push(result);
+                    let tmp = cloneDeep(obj[key], stackA, stackB)
+                    result[key] = tmp
+                })
+
+            }
+            return result
+        }
+        let m = new Map()
+        m.set(1, 3);
+        m.set(2, 6);
+        m.set(3, 4);
+        // let a = [m]
+        let a = {}
+
+        a.kk = {
+            b: 2
+        }
+        a.c = a
+            // a.le = [2, 3]
+        let b = cloneDeep(a)
+
+        // let a1 = [1, 2, 34, 5]
+        // a1.forEach(key => {
+        //     console.log(key)
+        // })
+
+        // function a() {
+        //     let num = 0
+
+        //     function b() {
+        //         return num
+        //     }
+
+        //     function addNum() {
+        //         num++
+        //     }
+        //     return {
+        //         b,
+        //         addNum
+        //     }
+        // }
+        // let c = a()
+        // let d = c.b;
+        // let e = () => {
+        //     return 1;
+        // }
+        // function bark() {
+        //     console.log(this.name, 'bark')
+        // }
+
+        // function Dog(name) {
+        //     this.name = name
+        // }
+        // let d1 = new Dog('wangcai')
+        // d1.bark = bark
+        // let b2 = bark.prototype.constructor()
+    </script>
+</body>
+
+</html>
